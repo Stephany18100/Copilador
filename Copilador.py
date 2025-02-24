@@ -4,26 +4,17 @@ import re
 
 # Expresiones regulares para validar la sintaxis del lenguaje
 patrones = {
-    # Declaración de variables con los tipos correctos
-    "Variable": r'@\s*(\w+)\s*=\s*(?:(int|float|"str")\s*;[\s\n]*|(?:"[^"\d]*[^\d"]*"|(?<!")\d+(?:\.\d+)?(?!"));)',  # Cadenas entre comillas, números enteros y flotantes
+    "Variable": r'@\s*(\w+)\s*=\s*(?:(int|float|"str")\s*;[\s\n]*|(?:"[^"\d]*[^\d"]*"|(?<!")\d+(?:\.\d+)?(?!"));)',  # oki
 
-    # Lectura de datos (int, float, str)
-    "Lectura": r'\?\->(int|float|str)',
+    "Lectura":  r'^\?->\s*(\w+|".*");$', #oki
 
-    # Impresión con diferentes formas de uso (! obligatorio)
-    "Impresion":  r'^!\s*(?:"[^"]*"|\w+)(?:\s*\+\s*(?:"[^"]*"|\w+))*;$',
+    "Impresion":  r'^! \s*(?:"[^"]*"|\w+)(?:\s*\+\s*(?:"[^"]*"|\w+))*;$', #oki
 
-    # Condicional IF (IF y ELSE opcional)
-    "Condicional IF": r'\?\s*(.*?)\s*\->\s*".*?"(?:\s*:\s*".*?")?;',
+    "Condicional IF": r'^\?->\s*(\w+)\s*(>=|<=|==|!=|<|>)\s*(\d+|\w+)\s*->\s*"([^"]*)";\s*(?:else\s*->\s*"([^"]*)";)?$', #oki
 
-    # Bucle FOR (inicio -> fin con llaves)
-    "Bucle FOR": r'#\s*\d+\s*->\s*\d+\s*\{.*?\}',
+    "Bucle FOR": r'^#\s*(\d+)\s*->\s*(\d+)\s*\{\s*!(.*)\s*\}\s*$', #oki
 
-    # Bucle WHILE (condición dentro de llaves)
-    "Bucle WHILE": r'\*\s*.*?\s*\{.*?\}',
-
-    # Operaciones matemáticas básicas
-    "Operaciones": r'@\s*\w+\s*=\s*\w+\s*[\+\-\*/%]\s*\w+\s*;'
+    "Bucle WHILE": r'^@ (\w+)\s*=\s*(\d+); \s*\* (.*) \s*\{ \s*! (.*); \s*@ (\w+)\s*=\s*(.*); \s*\}$', #oki
 }
 
 # Función para analizar el código y resaltar errores
